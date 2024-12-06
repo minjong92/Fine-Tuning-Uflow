@@ -34,7 +34,17 @@
   Defective data is often scarce or unavailable in anomaly detection tasks.
 
 ---
+### How to List Training Arguments
 
+For training, the only command line argument required is the category:
+
+```bash
+usage: train.py [-h] -cat CATEGORY [-config CONFIG_PATH] [-data DATA] [-train_dir TRAINING_DIR]
+```
+### How to List Predict Arguments
+```bash
+usage: test_predict.py [-h] -cat CATEGORY [-data DATA]
+```
 # Utilization of Artificially Generated Defective Data
 
 ## Solution
