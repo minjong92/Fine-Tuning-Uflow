@@ -1,21 +1,48 @@
-To enhance model training performance, data augmentation has been added to the pipeline.
-Previously, both training and inference utilized the same datamodule.py file to load data. However, this caused unintended data augmentation during inference, which is not ideal.
+# UFlow Model Training and Pipeline Improvements
 
-To address this issue:
+## Enhancements to Training and Inference
 
-Separated the data loading logic into two distinct files:
-train_datamodule.py: Includes data augmentation for training.
-test_datamodule.py: Excludes data augmentation for inference.
-This ensures that training benefits from augmentation while inference remains unaffected, improving the overall reliability of the results.
+### 1. Data Augmentation for Training
+- **Issue:** Previously, both training and inference utilized the same `datamodule.py` file to load data. This caused unintended data augmentation during inference, which is not ideal.
+- **Solution:**
+  - Separated data loading logic into two distinct files:
+    - **`train_datamodule.py`**: Includes data augmentation for training.
+    - **`test_datamodule.py`**: Excludes data augmentation for inference.
+  - **Benefit:** Training benefits from data augmentation, while inference remains unaffected, ensuring improved reliability of results.
 
-Added Confidence Score-Based OK/NG Classification
+---
 
-During inference, a confidence score threshold is now implemented to determine the result as either OK or NG.
-This ensures a clear and consistent decision-making process based on model predictions.
-These updates improve both training robustness and inference reliability, providing a well-defined separation of concerns and better performance metrics.
+### 2. Confidence Score-Based OK/NG Classification
+- **New Feature:** During inference, a **confidence score threshold** is implemented to classify results as either **OK** or **NG**.
+- **Benefit:** Provides a clear and consistent decision-making process based on model predictions.
 
-To train the UFlow model, at least one defective test sample is required. This is because the loss function is calculated based on the test data to update the model's weights. However, the primary purpose of anomaly detection is to identify outliers in situations where defective data is scarce or unavailable.
+---
 
-Thus, assuming the absence of defective data, artificially generated defective data was created from normal samples and used as test data. Experimental results showed no significant performance difference between the model trained using real defective test data and the model trained with artificially generated defective data.
+## Key Insights from UFlow Model Training
 
-These findings suggest that artificially generated defective data can serve as an effective substitute for real defective data, enabling efficient model training and evaluation even in environments where defective data is limited.
+### 1. Requirement for Defective Test Data
+- **Challenge:** The UFlow model requires at least one defective test sample to calculate the loss function and update model weights.
+- **Problem:** In anomaly detection, defective data is often scarce or unavailable.
+
+### 2. Using Artificially Generated Defective Data
+- **Solution:** Assuming no defective data is available:
+  - Artificially generated defective data was created from normal samples.
+  - This artificially created data was used as test data.
+- **Result:** Experimental results showed no significant performance difference between:
+  - The model trained using real defective test data.
+  - The model trained with artificially generated defective data.
+
+### 3. Conclusion
+- Artificially generated defective data can effectively substitute real defective data.
+- **Benefit:** Enables efficient model training and evaluation, even in environments where defective data is limited.
+
+---
+
+## Summary of Updates
+1. **Data Augmentation:**
+   - Separate logic for training (`train_datamodule.py`) and inference (`test_datamodule.py`).
+   - Ensures augmentation benefits training without affecting inference.
+2. **Confidence Score Classification:**
+   - Added OK/NG classification based on confidence scores for reliable inference.
+3. **Defective Data Handling:**
+   - Artificially generated defective data proved effective as a substitute for real defective data, enabling robust model performance.
